@@ -36,7 +36,7 @@ const Footer = () => {
             {/* Pondicherry Store Address */}
             <div className="bg-amber-50 rounded-2xl p-5 border border-amber-200 mb-6">
               <div className="flex items-start space-x-3">
-                <div className="w-10 h-10 bg-amber-200 rounded-xl flex items-center justify-center flex-shrink-0">
+                <div className="w-10 h-10 bg-amber-200 rounded-xl flex items-center justify-center shrink-0">
                   <MapPin className="w-5 h-5 text-amber-800" />
                 </div>
                 <div>
@@ -193,10 +193,10 @@ const Footer = () => {
             {/* Copyright & Address */}
             <div className="text-center md:text-right">
               <p className="text-sm text-amber-700">
-                © 2025 <span className="font-semibold text-amber-800">GoldenDrops</span>. All rights reserved.
+                © 2026 <span className="font-semibold text-amber-800">GoldenDrops</span>. All rights reserved.
               </p>
               <p className="text-xs text-amber-500 mt-1">
-                Made with ❤️ in Pondicherry • Traditional cold-pressed oils since 1998
+                Traditional cold-pressed oils since 1998
               </p>
             </div>
           </div>
