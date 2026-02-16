@@ -79,7 +79,7 @@ const CartPage = () => {
                   className="bg-white rounded-2xl p-6 shadow-md hover:shadow-lg transition flex items-center gap-6"
                 >
                   {/* Product Image */}
-                  <div className="flex-shrink-0">
+                  <div className="shrink-0">
                     <img
                       src={item.image}
                       alt={item.name}
@@ -88,7 +88,7 @@ const CartPage = () => {
                   </div>
 
                   {/* Product Details */}
-                  <div className="flex-grow">
+                  <div className="grow">
                     <h3 className="text-lg font-bold text-amber-900 mb-3">{item.name}</h3>
                     
                     <div className="flex items-center gap-4">
@@ -108,7 +108,7 @@ const CartPage = () => {
                       >
                         <Minus className="w-4 h-4 text-amber-700" />
                       </button>
-                      <span className="px-4 py-2 font-semibold text-amber-900 min-w-[3rem] text-center">
+                      <span className="px-4 py-2 font-semibold text-amber-900 min-w-12 text-center">
                         {item.quantity}
                       </span>
                       <button
@@ -129,7 +129,7 @@ const CartPage = () => {
                   </div>
 
                   {/* Item Total */}
-                  <div className="text-right flex-shrink-0">
+                  <div className="text-right shrink-0">
                     <p className="text-sm text-amber-600 mb-1">Subtotal</p>
                     <p className="text-xl font-bold text-amber-900">
                       ₹{(parseFloat(item.price.replace('₹', '').replace(',', '')) * item.quantity).toLocaleString('en-IN')}
