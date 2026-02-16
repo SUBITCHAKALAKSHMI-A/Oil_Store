@@ -1,7 +1,35 @@
 import React from "react";
-import { ShoppingCart, Search, Heart, Droplet } from "lucide-react";
+import { ShoppingCart, Search, Heart, Droplet, User, LogOut } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { useCart } from "../context/CartContext";
 
 const Navbar = () => {
+  const navigate = useNavigate();
+  const { isAuthenticated, user, logout, isAdmin } = useAuth();
+  const { getCartCount, getWishlistCount } = useCart();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
+
+  const handleCartClick = () => {
+    if (!isAuthenticated) {
+      navigate("/login");
+    } else {
+      navigate("/cart");
+    }
+  };
+
+  const handleWishlistClick = () => {
+    if (!isAuthenticated) {
+      navigate("/login");
+    } else {
+      navigate("/wishlist");
+    }
+  };
+
   return (
     <header className="bg-white shadow-md sticky top-0 z-50 border-b border-amber-100">
       <div className="container mx-auto px-6 py-4">
@@ -43,22 +71,59 @@ const Navbar = () => {
 
           {/* Cart & Account */}
           <div className="flex items-center space-x-5">
-            <button className="relative p-2 text-amber-700 hover:text-amber-900 transition">
+            <button 
+              onClick={handleWishlistClick}
+              className="relative p-2 text-amber-700 hover:text-amber-900 transition"
+            >
               <Heart className="w-6 h-6" />
               <span className="absolute -top-1 -right-1 w-4 h-4 bg-amber-500 rounded-full text-xs text-white flex items-center justify-center">
-                0
+                {getWishlistCount()}
               </span>
             </button>
-            <button className="flex items-center space-x-2 bg-linear-to-r from-amber-50 to-orange-50 px-5 py-2.5 rounded-full border border-amber-200 hover:border-amber-400 transition shadow-sm">
+            <button 
+              onClick={handleCartClick}
+              className="flex items-center space-x-2 bg-linear-to-r from-amber-50 to-orange-50 px-5 py-2.5 rounded-full border border-amber-200 hover:border-amber-400 transition shadow-sm"
+            >
               <ShoppingCart className="w-5 h-5 text-amber-700" />
               <span className="font-semibold text-amber-800">Cart</span>
               <span className="bg-amber-600 text-white w-5 h-5 rounded-full text-xs flex items-center justify-center">
-                3
+                {getCartCount()}
               </span>
             </button>
-            <button className="w-10 h-10 bg-linear-to-br from-amber-600 to-orange-600 rounded-full flex items-center justify-center text-white font-bold shadow-md shadow-amber-300">
-              A
-            </button>
+            
+            {/* Authentication buttons */}
+            {isAuthenticated ? (
+              <div className="flex items-center space-x-3">
+                {isAdmin() ? (
+                  <button 
+                    onClick={() => navigate('/admin/dashboard')}
+                    className="flex items-center space-x-2 px-4 py-2 bg-slate-100 text-slate-800 rounded-full hover:bg-slate-200 transition"
+                  >
+                    <User className="w-5 h-5" />
+                    <span className="font-medium">Admin Panel</span>
+                  </button>
+                ) : (
+                  <div className="flex items-center space-x-2 px-4 py-2 bg-amber-100 text-amber-800 rounded-full">
+                    <User className="w-5 h-5" />
+                    <span className="font-medium">{user?.name || 'User'}</span>
+                  </div>
+                )}
+                <button 
+                  onClick={handleLogout}
+                  className="flex items-center space-x-2 px-4 py-2 bg-red-100 text-red-700 rounded-full hover:bg-red-200 transition"
+                >
+                  <LogOut className="w-5 h-5" />
+                  <span className="font-medium">Logout</span>
+                </button>
+              </div>
+            ) : (
+              <button 
+                onClick={() => navigate('/login')}
+                className="px-5 py-2.5 bg-linear-to-r from-amber-600 to-orange-600 text-white rounded-full font-semibold hover:shadow-lg hover:shadow-amber-300 transition"
+              >
+                Login
+              </button>
+            )}
           </div>
         </div>
       </div>

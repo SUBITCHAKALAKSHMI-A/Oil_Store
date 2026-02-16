@@ -11,14 +11,14 @@ import castorImage from "../assets/castor.jpg";
 
 const Categories = () => {
   const categories = [
-    { name: "Olive Oil", icon: <Droplet className="w-6 h-6" />, color: "from-green-500 to-green-700", image: oliveImage },
-    { name: "Coconut Oil", icon: <Wheat className="w-6 h-6" />, color: "from-amber-500 to-amber-700", image: coconutImage },
-    { name: "Groundnut Oil", icon: <Flame className="w-6 h-6" />, color: "from-yellow-500 to-yellow-600", image: groundnutImage },
-    { name: "Sesame Oil", icon: <Droplet className="w-6 h-6" />, color: "from-stone-500 to-stone-700", image: sesameImage },
-    { name: "Sunflower Oil", icon: <Flame className="w-6 h-6" />, color: "from-yellow-500 to-amber-600", image: sunflowerImage },
-    { name: "Walnut Oil", icon: <Droplet className="w-6 h-6" />, color: "from-amber-700 to-orange-700", image: walnutImage },
-    { name: "Almond Oil", icon: <Droplet className="w-6 h-6" />, color: "from-amber-600 to-orange-600", image: almondImage },
-    { name: "Castor Oil", icon: <Droplet className="w-6 h-6" />, color: "from-amber-700 to-orange-700", image: castorImage }
+    { name: "Olive Oil", icon: <Droplet className="w-6 h-6" />, color: "from-green-50 to-green-100", textColor: "text-green-700", image: oliveImage },
+    { name: "Coconut Oil", icon: <Wheat className="w-6 h-6" />, color: "from-amber-50 to-amber-100", textColor: "text-amber-700", image: coconutImage },
+    { name: "Groundnut Oil", icon: <Flame className="w-6 h-6" />, color: "from-yellow-50 to-yellow-100", textColor: "text-yellow-700", image: groundnutImage },
+    { name: "Sesame Oil", icon: <Droplet className="w-6 h-6" />, color: "from-stone-50 to-stone-100", textColor: "text-stone-700", image: sesameImage },
+    { name: "Sunflower Oil", icon: <Flame className="w-6 h-6" />, color: "from-yellow-50 to-amber-100", textColor: "text-amber-700", image: sunflowerImage },
+    { name: "Walnut Oil", icon: <Droplet className="w-6 h-6" />, color: "from-amber-50 to-orange-100", textColor: "text-orange-700", image: walnutImage },
+    { name: "Almond Oil", icon: <Droplet className="w-6 h-6" />, color: "from-amber-50 to-orange-100", textColor: "text-orange-700", image: almondImage },
+    { name: "Castor Oil", icon: <Droplet className="w-6 h-6" />, color: "from-amber-50 to-orange-100", textColor: "text-orange-700", image: castorImage }
   ];
 
   return (
@@ -45,16 +45,16 @@ const Categories = () => {
                 className="w-full h-full object-cover group-hover:scale-110 transition duration-700"
               />
               <div
-                className={`absolute inset-0 bg-linear-to-br ${cat.color} opacity-80`}
+                className={`absolute inset-0 bg-linear-to-br ${cat.color} opacity-90`}
               ></div>
-              <div className="absolute inset-0 flex flex-col items-center justify-center text-white">
-                <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-3 group-hover:scale-110 transition">
+              <div className="absolute inset-0 flex flex-col items-center justify-center">
+                <div className={`w-16 h-16 bg-white backdrop-blur-sm rounded-2xl flex items-center justify-center mb-3 group-hover:scale-110 transition shadow-md`}>
                   {React.cloneElement(cat.icon, {
-                    className: "w-8 h-8 text-white",
+                    className: `w-8 h-8 ${cat.textColor}`,
                   })}
                 </div>
-                <h3 className="font-bold text-xl mb-1">{cat.name}</h3>
-                <p className="text-sm text-white/90">Shop now →</p>
+                <h3 className={`font-bold text-xl mb-1 ${cat.textColor}`}>{cat.name}</h3>
+                <p className={`text-sm ${cat.textColor} font-medium`}>Shop now →</p>
               </div>
             </div>
           </div>

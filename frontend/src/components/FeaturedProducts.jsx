@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import { ShoppingCart, Heart, Star, ChevronRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { useCart } from "../context/CartContext";
 import coconutImage from "../assets/coconut.jpg";
 import oliveImage from "../assets/olive.jpg";
 import groundnutImage from "../assets/groundnut.jpg";
@@ -10,16 +13,26 @@ import almondImage from "../assets/almond.jpg";
 import castorImage from "../assets/castor.jpg";
 
 const FeaturedProducts = () => {
-  const [liked, setLiked] = useState(new Set());
+  const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
+  const { addToCart, toggleWishlist, isInWishlist } = useCart();
 
-  const toggleLike = (productId) => {
-    const newLiked = new Set(liked);
-    if (newLiked.has(productId)) {
-      newLiked.delete(productId);
-    } else {
-      newLiked.add(productId);
+  const handleAddToCart = (product) => {
+    if (!isAuthenticated) {
+      navigate("/login");
+      return;
     }
-    setLiked(newLiked);
+    addToCart(product);
+    // Optional: Show a toast notification
+    console.log(`Added ${product.name} to cart`);
+  };
+
+  const handleToggleWishlist = (product) => {
+    if (!isAuthenticated) {
+      navigate("/login");
+      return;
+    }
+    toggleWishlist(product);
   };
 
   const products = [
@@ -64,8 +77,8 @@ const FeaturedProducts = () => {
                   alt={product.name}
                   className="w-full h-56 object-cover group-hover:scale-110 transition duration-700"
                 />
-                <button className="absolute bottom-3 right-3 w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-red-50 transition shadow-md" onClick={() => toggleLike(product.id)}>
-                  <Heart className="w-5 h-5" fill={liked.has(product.id) ? "currentColor" : "none"} stroke={liked.has(product.id) ? "#ef4444" : "#dc2626"} strokeWidth={2} color={liked.has(product.id) ? "#ef4444" : "#dc2626"} />
+                <button className="absolute bottom-3 right-3 w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-red-50 transition shadow-md" onClick={() => handleToggleWishlist(product)}>
+                  <Heart className="w-5 h-5" fill={isInWishlist(product.id) ? "currentColor" : "none"} stroke={isInWishlist(product.id) ? "#ef4444" : "#dc2626"} strokeWidth={2} color={isInWishlist(product.id) ? "#ef4444" : "#dc2626"} />
                 </button>
               </div>
               <div className="flex items-center mb-2">
@@ -89,7 +102,10 @@ const FeaturedProducts = () => {
                   {product.oldPrice}
                 </span>
               </div>
-              <button className="w-full bg-linear-to-r from-amber-500 to-orange-500 text-white py-3 rounded-xl font-semibold hover:shadow-lg hover:shadow-amber-300 transition flex items-center justify-center">
+              <button 
+                onClick={() => handleAddToCart(product)}
+                className="w-full bg-linear-to-r from-amber-500 to-orange-500 text-white py-3 rounded-xl font-semibold hover:shadow-lg hover:shadow-amber-300 transition flex items-center justify-center"
+              >
                 <ShoppingCart className="w-4 h-4 mr-2" strokeWidth={2} /> Add to Cart
               </button>
             </div>
