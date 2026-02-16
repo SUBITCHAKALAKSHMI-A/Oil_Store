@@ -7,6 +7,7 @@ import LoginPage from './pages/LoginPage';
 import UserSignupPage from './pages/UserSignupPage';
 import AdminSignupPage from './pages/AdminSignupPage';
 import UserDashboard from './pages/UserDashboard';
+import UserProfile from './pages/UserProfile';
 import AdminDashboard from './pages/AdminDashboard';
 import CartPage from './pages/CartPage';
 import WishlistPage from './pages/WishlistPage';
@@ -34,6 +35,14 @@ function App() {
             element={
               <ProtectedRoute requiredRole="user">
                 <UserDashboard />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/user/profile" 
+            element={
+              <ProtectedRoute requiredRole="user">
+                <UserProfile />
               </ProtectedRoute>
             } 
           />
