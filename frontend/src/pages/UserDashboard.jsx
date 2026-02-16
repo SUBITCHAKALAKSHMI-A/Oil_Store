@@ -33,7 +33,7 @@ const UserDashboard = () => {
           </div>
           <button
             onClick={handleLogout}
-            className="px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors"
+            className="px-4 py-2 bg-orange-400 text-white rounded-lg hover:bg-orange-500 transition-colors"
           >
             Logout
           </button>
@@ -43,7 +43,7 @@ const UserDashboard = () => {
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Welcome Card */}
-        <div className="bg-gradient-to-r from-orange-500 to-amber-500 rounded-xl p-8 text-white mb-8">
+        <div className="bg-gradient-to-r from-orange-300 to-amber-400 rounded-xl p-8 text-white mb-8">
           <h2 className="text-3xl font-bold mb-2">Welcome to Oil Store!</h2>
           <p className="text-orange-50">Browse our premium collection of oils and products</p>
         </div>

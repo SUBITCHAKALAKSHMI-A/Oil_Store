@@ -125,7 +125,7 @@ const AdminSignupPage = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-orange-600 text-white py-3 rounded-lg font-semibold hover:bg-orange-700 transition-colors disabled:bg-orange-300 disabled:cursor-not-allowed mt-6"
+              className="w-full bg-orange-400 text-white py-3 rounded-lg font-semibold hover:bg-orange-500 transition-colors disabled:bg-orange-200 disabled:cursor-not-allowed mt-6"
             >
               {loading ? 'Creating Account...' : 'Create Admin Account'}
             </button>

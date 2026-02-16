@@ -10,6 +10,7 @@ import UserDashboard from './pages/UserDashboard';
 import AdminDashboard from './pages/AdminDashboard';
 import CartPage from './pages/CartPage';
 import WishlistPage from './pages/WishlistPage';
+import SearchPage from './pages/SearchPage';
 import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
               <Route path="/admin/signup" element={<AdminSignupPage />} />
               <Route path="/cart" element={<CartPage />} />
               <Route path="/wishlist" element={<WishlistPage />} />
+              <Route path="/search" element={<SearchPage />} />
           
           {/* Protected User Routes */}
           <Route 

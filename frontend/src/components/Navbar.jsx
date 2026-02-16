@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { ShoppingCart, Search, Heart, Droplet, User, LogOut } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
@@ -8,6 +8,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const { isAuthenticated, user, logout, isAdmin } = useAuth();
   const { getCartCount, getWishlistCount } = useCart();
+  const [searchQuery, setSearchQuery] = useState("");
 
   const handleLogout = () => {
     logout();
@@ -30,6 +31,13 @@ const Navbar = () => {
     }
   };
 
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+    }
+  };
+
   return (
     <header className="bg-white shadow-md sticky top-0 z-50 border-b border-amber-100">
       <div className="container mx-auto px-6 py-4">
@@ -37,7 +45,7 @@ const Navbar = () => {
           {/* Logo with emblem */}
           <div className="flex items-center space-x-3">
             <div className="relative">
-              <div className="w-12 h-12 bg-linear-to-br from-amber-600 to-orange-600 rounded-2xl flex items-center justify-center shadow-lg shadow-amber-200">
+              <div className="w-12 h-12 bg-linear-to-br from-amber-400 to-orange-400 rounded-2xl flex items-center justify-center shadow-lg shadow-amber-200">
                 <Droplet className="w-7 h-7 text-white" fill="white" stroke="white" />
               </div>
               <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-yellow-400 rounded-full flex items-center justify-center text-xs font-bold text-white border-2 border-white">
@@ -56,17 +64,22 @@ const Navbar = () => {
 
           {/* Search bar - attractive */}
           <div className="flex-1 max-w-xl mx-8">
-            <div className="relative group">
+            <form onSubmit={handleSearch} className="relative group">
               <input
                 type="text"
                 placeholder="Search for pure oils, brands..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full px-6 py-3 pl-14 pr-12 rounded-full border border-amber-200 focus:border-amber-400 focus:ring-2 focus:ring-amber-200 outline-none transition bg-amber-50/50 text-amber-900 placeholder-amber-400"
               />
               <Search className="absolute left-4 top-3.5 w-5 h-5 text-amber-500 group-focus-within:text-amber-700" />
-              <button className="absolute right-2 top-2 bg-linear-to-r from-amber-500 to-orange-500 text-white px-5 py-1.5 rounded-full text-sm font-medium hover:shadow-lg hover:shadow-amber-200 transition flex items-center">
+              <button 
+                type="submit"
+                className="absolute right-2 top-2 bg-linear-to-r from-amber-300 to-orange-400 text-white px-5 py-1.5 rounded-full text-sm font-medium hover:shadow-lg hover:shadow-amber-200 transition flex items-center"
+              >
                 Go
               </button>
-            </div>
+            </form>
           </div>
 
           {/* Cart & Account */}
@@ -119,7 +132,7 @@ const Navbar = () => {
             ) : (
               <button 
                 onClick={() => navigate('/login')}
-                className="px-5 py-2.5 bg-linear-to-r from-amber-600 to-orange-600 text-white rounded-full font-semibold hover:shadow-lg hover:shadow-amber-300 transition"
+                className="px-5 py-2.5 bg-linear-to-r from-amber-400 to-orange-400 text-white rounded-full font-semibold hover:shadow-lg hover:shadow-amber-300 transition"
               >
                 Login
               </button>

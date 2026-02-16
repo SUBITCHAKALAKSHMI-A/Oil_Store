@@ -38,7 +38,7 @@ const CartPage = () => {
             <p className="text-amber-600 mb-8">Add some products to get started!</p>
             <button
               onClick={() => navigate('/')}
-              className="bg-linear-to-r from-amber-500 to-orange-500 text-white px-8 py-3 rounded-full font-semibold hover:shadow-lg hover:shadow-amber-300 transition inline-flex items-center"
+              className="bg-linear-to-r from-amber-300 to-orange-400 text-white px-8 py-3 rounded-full font-semibold hover:shadow-lg hover:shadow-amber-300 transition inline-flex items-center"
             >
               <ArrowLeft className="w-5 h-5 mr-2" />
               Continue Shopping
@@ -89,8 +89,7 @@ const CartPage = () => {
 
                   {/* Product Details */}
                   <div className="flex-grow">
-                    <h3 className="text-lg font-bold text-amber-900 mb-1">{item.name}</h3>
-                    <p className="text-sm text-amber-600 mb-3">{item.badge}</p>
+                    <h3 className="text-lg font-bold text-amber-900 mb-3">{item.name}</h3>
                     
                     <div className="flex items-center gap-4">
                       <div className="flex items-baseline gap-2">
@@ -174,7 +173,7 @@ const CartPage = () => {
                   </div>
                 </div>
 
-                <button className="w-full bg-linear-to-r from-amber-500 to-orange-500 text-white py-4 rounded-xl font-bold text-lg hover:shadow-lg hover:shadow-amber-300 transition mb-3">
+                <button className="w-full bg-linear-to-r from-amber-300 to-orange-400 text-white py-4 rounded-xl font-bold text-lg hover:shadow-lg hover:shadow-amber-300 transition mb-3">
                   Proceed to Checkout
                 </button>
 

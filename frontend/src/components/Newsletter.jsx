@@ -4,7 +4,7 @@ import almondImage from "../assets/almond.jpg";
 
 const Newsletter = () => {
   return (
-    <section className="bg-linear-to-r from-amber-900 to-orange-900 text-white py-20 relative overflow-hidden">
+    <section className="bg-linear-to-r from-amber-700 to-orange-700 text-white py-20 relative overflow-hidden">
       <div
         className="absolute inset-0"
         style={{

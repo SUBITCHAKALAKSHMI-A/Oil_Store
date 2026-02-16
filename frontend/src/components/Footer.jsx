@@ -11,7 +11,7 @@ const Footer = () => {
           <div className="lg:col-span-4">
             <div className="flex items-center space-x-3 mb-5">
               <div className="relative">
-                <div className="w-14 h-14 bg-linear-to-br from-amber-600 to-orange-600 rounded-2xl flex items-center justify-center shadow-lg shadow-amber-200">
+                <div className="w-14 h-14 bg-linear-to-br from-amber-400 to-orange-400 rounded-2xl flex items-center justify-center shadow-lg shadow-amber-200">
                   <Droplet className="w-8 h-8 text-white" fill="white" stroke="white" />
                 </div>
                 <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-yellow-400 rounded-full flex items-center justify-center text-[10px] font-bold text-white border-2 border-white">

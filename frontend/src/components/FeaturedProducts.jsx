@@ -36,14 +36,14 @@ const FeaturedProducts = () => {
   };
 
   const products = [
-    { id: 1, name: "Extra Virgin Olive Oil", price: "₹1,274", oldPrice: "₹1,400", rating: 4.8, reviews: 124, badge: "Bestseller", image: oliveImage },
-    { id: 2, name: "Cold Pressed Coconut Oil", price: "₹1,274", oldPrice: "₹1,400", rating: 4.7, reviews: 98, badge: "Organic", image: coconutImage },
-    { id: 3, name: "Wood Pressed Groundnut Oil", price: "₹1,274", oldPrice: "₹1,400", rating: 4.6, reviews: 87, badge: "Traditional", image: groundnutImage },
-    { id: 4, name: "Pure Sesame Oil", price: "₹1,274", oldPrice: "₹1,400", rating: 4.8, reviews: 76, badge: "Gingelly", image: sesameImage },
-    { id: 5, name: "Refined Sunflower Oil", price: "₹1,274", oldPrice: "₹1,400", rating: 4.5, reviews: 112, badge: "Light", image: sunflowerImage },
-    { id: 6, name: "Premium Walnut Oil", price: "₹2,274", oldPrice: "₹2,675", rating: 4.9, reviews: 45, badge: "Gourmet", image: walnutImage },
-    { id: 7, name: "Sweet Almond Oil", price:" ₹2,275 ", oldPrice:" ₹2,675 ", rating : 4.7 , reviews : 63 , badge : "Vitamin E" , image : almondImage },
-    { id : 8 , name : 'Traditional Castor Oil' , price : '₹1,275' , oldPrice : '₹1,675' , rating : 4.6 , reviews : 93 , badge : 'Wood Pressed' , image : castorImage }
+    { id: 1, name: "Olive Oil", price: "₹900", oldPrice: "₹1,000", rating: 4.8, reviews: 120, badge: "Bestseller", image: oliveImage },
+    { id: 2, name: "Cold Pressed Coconut Oil", price: "₹1,200", oldPrice: "₹1,400", rating: 4.7, reviews: 98, badge: "Organic", image: coconutImage },
+    { id: 3, name: "Wood Pressed Groundnut Oil", price: "₹1,200", oldPrice: "₹1,400", rating: 4.6, reviews: 87, badge: "Traditional", image: groundnutImage },
+    { id: 4, name: "Pure Sesame Oil", price: "₹1,200", oldPrice: "₹1,400", rating: 4.8, reviews: 76, badge: "Gingelly", image: sesameImage },
+    { id: 5, name: "Refined Sunflower Oil", price: "₹1,200", oldPrice: "₹1,400", rating: 4.5, reviews: 112, badge: "Light", image: sunflowerImage },
+    { id: 6, name: "Premium Walnut Oil", price: "₹2,200", oldPrice: "₹2,675", rating: 4.9, reviews: 45, badge: "Gourmet", image: walnutImage },
+    { id: 7, name: "Sweet Almond Oil", price:" ₹2,200 ", oldPrice:" ₹2,675 ", rating : 4.7 , reviews : 63 , badge : "Vitamin E" , image : almondImage },
+    { id : 8 , name : 'Traditional Castor Oil' , price : '₹1,200' , oldPrice : '₹1,675' , rating : 4.6 , reviews : 93 , badge : 'Wood Pressed' , image : castorImage }
 ];
 
   return (
@@ -68,17 +68,26 @@ const FeaturedProducts = () => {
               key={product.id}
               className="group bg-linear-to-b from-white to-amber-50/30 rounded-3xl p-5 shadow-md hover:shadow-2xl transition border border-amber-100 hover:border-amber-300 relative"
             >
-              <div className="absolute top-4 left-4 z-10 bg-linear-to-r from-amber-500 to-orange-500 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg">
-                {product.badge}
-              </div>
               <div className="relative mb-4 overflow-hidden rounded-2xl">
                 <img
                   src={product.image}
                   alt={product.name}
                   className="w-full h-56 object-cover group-hover:scale-110 transition duration-700"
                 />
-                <button className="absolute bottom-3 right-3 w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-red-50 transition shadow-md" onClick={() => handleToggleWishlist(product)}>
-                  <Heart className="w-5 h-5" fill={isInWishlist(product.id) ? "currentColor" : "none"} stroke={isInWishlist(product.id) ? "#ef4444" : "#dc2626"} strokeWidth={2} color={isInWishlist(product.id) ? "#ef4444" : "#dc2626"} />
+                <button 
+                  className={`absolute top-4 right-4 w-11 h-11 rounded-full flex items-center justify-center transition-all duration-300 shadow-md ${
+                    isInWishlist(product.id) 
+                      ? 'bg-white hover:bg-gray-50' 
+                      : 'bg-white/90 hover:bg-white'
+                  }`}
+                  onClick={() => handleToggleWishlist(product)}
+                >
+                  <Heart 
+                    className={`w-5 h-5 transition-all duration-300 ${isInWishlist(product.id) ? 'text-red-500' : 'text-gray-400'}`}
+                    fill={isInWishlist(product.id) ? "currentColor" : "none"} 
+                    stroke="currentColor" 
+                    strokeWidth={2} 
+                  />
                 </button>
               </div>
               <div className="flex items-center mb-2">
@@ -104,7 +113,7 @@ const FeaturedProducts = () => {
               </div>
               <button 
                 onClick={() => handleAddToCart(product)}
-                className="w-full bg-linear-to-r from-amber-500 to-orange-500 text-white py-3 rounded-xl font-semibold hover:shadow-lg hover:shadow-amber-300 transition flex items-center justify-center"
+                className="w-full bg-linear-to-r from-amber-300 to-orange-400 text-white py-3 rounded-xl font-semibold hover:shadow-lg hover:shadow-amber-300 transition flex items-center justify-center"
               >
                 <ShoppingCart className="w-4 h-4 mr-2" strokeWidth={2} /> Add to Cart
               </button>
