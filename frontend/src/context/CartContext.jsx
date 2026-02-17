@@ -39,18 +39,29 @@ export const CartProvider = ({ children }) => {
 
   const addToCart = (product) => {
     setCartItems(prevItems => {
-      const existingItem = prevItems.find(item => item.id === product.id);
+      const productId = product._id || product.id;
+      const existingItem = prevItems.find(item => item.id === productId);
       
       if (existingItem) {
         // If item exists, increase quantity
         return prevItems.map(item =>
-          item.id === product.id
+          item.id === productId
             ? { ...item, quantity: item.quantity + 1 }
             : item
         );
       } else {
-        // Add new item with quantity 1
-        return [...prevItems, { ...product, quantity: 1 }];
+        // Transform product to cart item format
+        const cartItem = {
+          id: productId,
+          name: product.name,
+          price: typeof product.price === 'number' ? `₹${product.price}` : product.price,
+          oldPrice: product.oldPrice ? (typeof product.oldPrice === 'number' ? `₹${product.oldPrice}` : product.oldPrice) : null,
+          image: product.images && product.images.length > 0 
+            ? `http://localhost:5000${product.images[0]}` 
+            : (product.image || 'https://via.placeholder.com/400x300?text=No+Image'),
+          quantity: 1
+        };
+        return [...prevItems, cartItem];
       }
     });
   };
@@ -90,11 +101,23 @@ export const CartProvider = ({ children }) => {
   // Wishlist functions
   const addToWishlist = (product) => {
     setWishlistItems(prevItems => {
-      const exists = prevItems.find(item => item.id === product.id);
+      const productId = product._id || product.id;
+      const exists = prevItems.find(item => item.id === productId);
       if (exists) {
         return prevItems; // Already in wishlist
       }
-      return [...prevItems, product];
+      
+      // Transform product to wishlist item format
+      const wishlistItem = {
+        id: productId,
+        name: product.name,
+        price: typeof product.price === 'number' ? `₹${product.price}` : product.price,
+        oldPrice: product.oldPrice ? (typeof product.oldPrice === 'number' ? `₹${product.oldPrice}` : product.oldPrice) : null,
+        image: product.images && product.images.length > 0 
+          ? `http://localhost:5000${product.images[0]}` 
+          : (product.image || 'https://via.placeholder.com/400x300?text=No+Image')
+      };
+      return [...prevItems, wishlistItem];
     });
   };
 
@@ -107,8 +130,9 @@ export const CartProvider = ({ children }) => {
   };
 
   const toggleWishlist = (product) => {
-    if (isInWishlist(product.id)) {
-      removeFromWishlist(product.id);
+    const productId = product._id || product.id;
+    if (isInWishlist(productId)) {
+      removeFromWishlist(productId);
     } else {
       addToWishlist(product);
     }

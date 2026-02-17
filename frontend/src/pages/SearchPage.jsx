@@ -94,7 +94,7 @@ const SearchPage = () => {
               <p className="text-amber-600 mb-8">Try searching with different keywords</p>
               <button
                 onClick={() => navigate('/')}
-                className="bg-linear-to-r from-amber-300 to-orange-400 text-white px-8 py-3 rounded-full font-semibold hover:shadow-lg hover:shadow-amber-300 transition"
+                className="bg-gradient-to-r from-amber-300 to-orange-400 text-white px-8 py-3 rounded-full font-semibold hover:shadow-lg hover:shadow-amber-300 transition"
               >
                 Browse All Products
               </button>
@@ -104,7 +104,7 @@ const SearchPage = () => {
               {filteredProducts.map((product) => (
                 <div
                   key={product.id}
-                  className="group bg-linear-to-b from-white to-amber-50/30 rounded-3xl p-5 shadow-md hover:shadow-2xl transition border border-amber-100 hover:border-amber-300 relative"
+                  className="group bg-gradient-to-b from-white to-amber-50/30 rounded-3xl p-5 shadow-md hover:shadow-2xl transition border border-amber-100 hover:border-amber-300 relative"
                 >
                   <div className="relative mb-4 overflow-hidden rounded-2xl">
                     <img
@@ -151,7 +151,7 @@ const SearchPage = () => {
                   </div>
                   <button 
                     onClick={() => handleAddToCart(product)}
-                    className="w-full bg-linear-to-r from-amber-300 to-orange-400 text-white py-3 rounded-xl font-semibold hover:shadow-lg hover:shadow-amber-300 transition flex items-center justify-center"
+                    className="w-full bg-gradient-to-r from-amber-300 to-orange-400 text-white py-3 rounded-xl font-semibold hover:shadow-lg hover:shadow-amber-300 transition flex items-center justify-center"
                   >
                     <ShoppingCart className="w-4 h-4 mr-2" strokeWidth={2} /> Add to Cart
                   </button>
