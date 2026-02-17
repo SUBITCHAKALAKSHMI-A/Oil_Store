@@ -13,6 +13,12 @@ import CartPage from './pages/CartPage';
 import WishlistPage from './pages/WishlistPage';
 import SearchPage from './pages/SearchPage';
 import ProtectedRoute from './components/ProtectedRoute';
+import ManageUsers from './pages/ManageUsers';
+import ManageProducts from './pages/ManageProducts';
+import ManageOrders from './pages/ManageOrders';
+import ManageCategories from './pages/ManageCategories';
+import Analytics from './pages/Analytics';
+import Settings from './pages/Settings';
 
 function App() {
   return (
@@ -56,6 +62,54 @@ function App() {
               </ProtectedRoute>
             } 
           />
+          <Route 
+            path="/admin/users" 
+            element={
+              <ProtectedRoute requiredRole="admin">
+                <ManageUsers />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/admin/products" 
+            element={
+              <ProtectedRoute requiredRole="admin">
+                <ManageProducts />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/admin/orders" 
+            element={
+              <ProtectedRoute requiredRole="admin">
+                <ManageOrders />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/admin/categories" 
+            element={
+              <ProtectedRoute requiredRole="admin">
+                <ManageCategories />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/admin/analytics" 
+            element={
+              <ProtectedRoute requiredRole="admin">
+                <Analytics />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/admin/settings" 
+            element={
+              <ProtectedRoute requiredRole="admin">
+                <Settings />
+              </ProtectedRoute>
+            } 
+          />
         </Routes>
       </div>
     </Router>
@@ -65,3 +119,4 @@ function App() {
 }
 
 export default App;
+

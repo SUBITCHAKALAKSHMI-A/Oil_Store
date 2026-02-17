@@ -140,7 +140,10 @@ const AdminDashboard = () => {
 
         {/* Management Sections */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <button className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow border-t-4 border-blue-500">
+          <button 
+            onClick={() => navigate('/admin/users')}
+            className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-all hover:scale-105 border-t-4 border-blue-500"
+          >
             <div className="text-center">
               <div className="inline-block p-4 bg-blue-100 rounded-full mb-4">
                 <svg className="w-10 h-10 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -152,7 +155,10 @@ const AdminDashboard = () => {
             </div>
           </button>
 
-          <button className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow border-t-4 border-green-500">
+          <button 
+            onClick={() => navigate('/admin/products')}
+            className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-all hover:scale-105 border-t-4 border-green-500"
+          >
             <div className="text-center">
               <div className="inline-block p-4 bg-green-100 rounded-full mb-4">
                 <svg className="w-10 h-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -164,7 +170,10 @@ const AdminDashboard = () => {
             </div>
           </button>
 
-          <button className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow border-t-4 border-purple-500">
+          <button 
+            onClick={() => navigate('/admin/orders')}
+            className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-all hover:scale-105 border-t-4 border-purple-500"
+          >
             <div className="text-center">
               <div className="inline-block p-4 bg-purple-100 rounded-full mb-4">
                 <svg className="w-10 h-10 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -176,7 +185,10 @@ const AdminDashboard = () => {
             </div>
           </button>
 
-          <button className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow border-t-4 border-yellow-500">
+          <button 
+            onClick={() => navigate('/admin/categories')}
+            className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-all hover:scale-105 border-t-4 border-yellow-500"
+          >
             <div className="text-center">
               <div className="inline-block p-4 bg-yellow-100 rounded-full mb-4">
                 <svg className="w-10 h-10 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -188,7 +200,10 @@ const AdminDashboard = () => {
             </div>
           </button>
 
-          <button className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow border-t-4 border-red-500">
+          <button 
+            onClick={() => navigate('/admin/analytics')}
+            className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-all hover:scale-105 border-t-4 border-red-500"
+          >
             <div className="text-center">
               <div className="inline-block p-4 bg-red-100 rounded-full mb-4">
                 <svg className="w-10 h-10 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -200,7 +215,10 @@ const AdminDashboard = () => {
             </div>
           </button>
 
-          <button className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow border-t-4 border-indigo-500">
+          <button 
+            onClick={() => navigate('/admin/settings')}
+            className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-all hover:scale-105 border-t-4 border-indigo-500"
+          >
             <div className="text-center">
               <div className="inline-block p-4 bg-indigo-100 rounded-full mb-4">
                 <svg className="w-10 h-10 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -219,3 +237,4 @@ const AdminDashboard = () => {
 };
 
 export default AdminDashboard;
+
