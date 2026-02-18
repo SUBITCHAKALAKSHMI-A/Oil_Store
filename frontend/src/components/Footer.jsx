@@ -20,7 +20,7 @@ const Footer = () => {
               </div>
               <div>
                 <h2 className="text-2xl font-bold bg-linear-to-r from-amber-800 to-orange-700 bg-clip-text text-transparent">
-                  Golden<span className="text-amber-600">Drops</span>
+                  Ravi<span className="text-amber-600">OilMill</span>
                 </h2>
                 <p className="text-xs text-amber-600 font-medium tracking-wider">
                   EST. 1998 • PONDICHERRY
@@ -29,7 +29,7 @@ const Footer = () => {
             </div>
             
             <p className="text-amber-700 mb-6 leading-relaxed">
-              Since 1998, GoldenDrops has been Pondicherry's trusted source for premium cold-pressed oils. 
+              Since 1998, Ravi Oil Mill has been Pondicherry's trusted source for premium cold-pressed oils. 
               Our traditional wood-pressed methods preserve the authentic flavor and nutritional value of every drop.
             </p>
             
@@ -42,8 +42,8 @@ const Footer = () => {
                 <div>
                   <h4 className="font-bold text-amber-900 text-sm uppercase tracking-wider">PONDICHERRY STORE</h4>
                   <p className="text-amber-700 text-sm mt-1">
-                    42, Mission Street, White Town,<br />
-                    Pondicherry - 605001, India
+                    NE 3,100 Feet Road, Anitha Nagar,<br />
+                    Pondicherry - 605004, India
                   </p>
                 </div>
               </div>
@@ -53,15 +53,15 @@ const Footer = () => {
             <div className="space-y-3">
               <div className="flex items-center space-x-3 text-amber-700">
                 <Phone className="w-4 h-4 text-amber-600" />
-                <span className="text-sm hover:text-amber-900 transition">+91 413 222 5678</span>
+                <span className="text-sm hover:text-amber-900 transition">+91 86106 69019</span>
               </div>
               <div className="flex items-center space-x-3 text-amber-700">
                 <Mail className="w-4 h-4 text-amber-600" />
-                <span className="text-sm hover:text-amber-900 transition">hello@goldendrops.in</span>
+                <span className="text-sm hover:text-amber-900 transition">ravioilmill@gmail.com</span>
               </div>
               <div className="flex items-center space-x-3 text-amber-700">
                 <Clock className="w-4 h-4 text-amber-600" />
-                <span className="text-sm">Mon-Sat: 9:00 AM - 8:00 PM</span>
+                <span className="text-sm">Mon-Sat: 9:00 AM - 9:00 PM</span>
               </div>
             </div>
           </div>
@@ -193,7 +193,7 @@ const Footer = () => {
             {/* Copyright & Address */}
             <div className="text-center md:text-right">
               <p className="text-sm text-amber-700">
-                © 2026 <span className="font-semibold text-amber-800">GoldenDrops</span>. All rights reserved.
+                © 2026 <span className="font-semibold text-amber-800">Ravi Oil Mill</span>. All rights reserved.
               </p>
               <p className="text-xs text-amber-500 mt-1">
                 Traditional cold-pressed oils since 1998
