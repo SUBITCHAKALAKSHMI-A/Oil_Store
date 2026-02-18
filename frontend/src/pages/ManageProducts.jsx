@@ -304,7 +304,7 @@ const ManageProducts = () => {
               <div key={product._id} className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-shadow duration-300 border border-gray-100">
                 {/* Product Image */}
                 {product.images && product.images.length > 0 ? (
-                  <div className="relative h-56 overflow-hidden bg-gradient-to-br from-amber-50 to-orange-50">
+                  <div className="relative h-56 overflow-hidden bg-linear-to-br from-amber-50 to-orange-50">
                     <img 
                       src={`http://localhost:5000${product.images[0]}`}
                       alt={product.name}
@@ -315,17 +315,17 @@ const ManageProducts = () => {
                     />
                   </div>
                 ) : (
-                  <div className="w-full h-56 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                  <div className="w-full h-56 bg-linear-to-br from-gray-100 to-gray-200 flex items-center justify-center">
                     <ImageIcon className="w-16 h-16 text-gray-400" />
                   </div>
                 )}
                 
-                <div className="p-6 bg-gradient-to-br from-white to-gray-50">
+                <div className="p-6 bg-linear-to-br from-white to-gray-50">
                   <div className="mb-4">
                     <h3 className="text-xl font-bold text-gray-900 mb-2 line-clamp-1">{product.name}</h3>
                     <p className="text-sm text-gray-600 mb-3 line-clamp-2">{product.description}</p>
                     {product.badge && (
-                      <span className="inline-block px-3 py-1 bg-gradient-to-r from-amber-400 to-orange-500 text-white text-xs font-semibold rounded-full shadow-sm">
+                      <span className="inline-block px-3 py-1 bg-linear-to-r from-amber-400 to-orange-500 text-white text-xs font-semibold rounded-full shadow-sm">
                         {product.badge}
                       </span>
                     )}
@@ -343,14 +343,14 @@ const ManageProducts = () => {
                   <div className="flex gap-2">
                     <button
                       onClick={() => startEdit(product)}
-                      className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all shadow-md hover:shadow-lg"
+                      className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-linear-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all shadow-md hover:shadow-lg"
                     >
                       <Edit className="w-4 h-4" />
                       Edit
                     </button>
                     <button
                       onClick={() => handleDeleteProduct(product._id)}
-                      className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-lg hover:from-red-600 hover:to-red-700 transition-all shadow-md hover:shadow-lg"
+                      className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-linear-to-r from-red-500 to-red-600 text-white rounded-lg hover:from-red-600 hover:to-red-700 transition-all shadow-md hover:shadow-lg"
                     >
                       <Trash2 className="w-4 h-4" />
                       Delete

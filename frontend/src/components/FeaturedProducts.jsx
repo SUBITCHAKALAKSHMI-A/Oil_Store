@@ -97,7 +97,7 @@ const FeaturedProducts = () => {
           {products.map((product) => (
             <div
               key={product._id}
-              className="group bg-gradient-to-br from-white via-amber-50/50 to-orange-50/30 rounded-3xl p-5 shadow-lg hover:shadow-2xl transition-all duration-300 border-2 border-amber-200/50 hover:border-amber-400 relative transform hover:-translate-y-1"
+              className="group bg-linear-to-br from-white via-amber-50/50 to-orange-50/30 rounded-3xl p-5 shadow-lg hover:shadow-2xl transition-all duration-300 border-2 border-amber-200/50 hover:border-amber-400 relative transform hover:-translate-y-1"
             >
               <div className="relative mb-4 overflow-hidden rounded-2xl shadow-md">
                 <img
@@ -138,7 +138,7 @@ const FeaturedProducts = () => {
                 {product.name}
               </h3>
               {product.badge && (
-                <span className="inline-block px-3 py-1 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-xs font-semibold rounded-full mb-3 shadow-sm">
+                <span className="inline-block px-3 py-1 bg-linear-to-r from-amber-500 to-orange-500 text-white text-xs font-semibold rounded-full mb-3 shadow-sm">
                   {product.badge}
                 </span>
               )}
@@ -154,7 +154,7 @@ const FeaturedProducts = () => {
               </div>
               <button
                 onClick={() => handleAddToCart(product)}
-                className="w-full bg-gradient-to-r from-amber-600 to-orange-600 text-white font-semibold py-3 px-6 rounded-full hover:from-amber-700 hover:to-orange-700 transition-all duration-300 flex items-center justify-center shadow-lg hover:shadow-xl transform hover:scale-105"
+                className="w-full bg-linear-to-r from-amber-600 to-orange-600 text-white font-semibold py-3 px-6 rounded-full hover:from-amber-700 hover:to-orange-700 transition-all duration-300 flex items-center justify-center shadow-lg hover:shadow-xl transform hover:scale-105"
               >
                 <ShoppingCart className="w-5 h-5 mr-2" />
                 Add to Cart
