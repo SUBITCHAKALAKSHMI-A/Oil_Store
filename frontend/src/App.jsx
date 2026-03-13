@@ -19,6 +19,7 @@ import ManageOrders from './pages/ManageOrders';
 import ManageCategories from './pages/ManageCategories';
 import Analytics from './pages/Analytics';
 import Settings from './pages/Settings';
+import ProductDetailPage from './pages/ProductDetailPage';
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
               <Route path="/cart" element={<CartPage />} />
               <Route path="/wishlist" element={<WishlistPage />} />
               <Route path="/search" element={<SearchPage />} />
+              <Route path="/product/:id" element={<ProductDetailPage />} />
           
           {/* Protected User Routes */}
           <Route 

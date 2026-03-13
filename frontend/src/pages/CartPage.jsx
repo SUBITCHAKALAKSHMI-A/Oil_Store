@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Trash2, Plus, Minus, ShoppingBag, ArrowLeft } from 'lucide-react';
+import { Trash2, Plus, Minus, ShoppingBag, ArrowLeft, Heart } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import Navbar from '../components/Navbar';
@@ -8,7 +8,7 @@ import Footer from '../components/Footer';
 
 const CartPage = () => {
   const navigate = useNavigate();
-  const { cartItems, removeFromCart, updateQuantity, getCartTotal, clearCart } = useCart();
+  const { cartItems, removeFromCart, updateQuantity, getCartTotal, clearCart, toggleWishlist, isInWishlist } = useCart();
   const { isAuthenticated } = useAuth();
 
   React.useEffect(() => {
@@ -38,7 +38,7 @@ const CartPage = () => {
             <p className="text-amber-600 mb-8">Add some products to get started!</p>
             <button
               onClick={() => navigate('/')}
-              className="bg-gradient-to-r from-amber-300 to-orange-400 text-white px-8 py-3 rounded-full font-semibold hover:shadow-lg hover:shadow-amber-300 transition inline-flex items-center"
+              className="bg-linear-to-r from-amber-300 to-orange-400 text-white px-8 py-3 rounded-full font-semibold hover:shadow-lg hover:shadow-amber-300 transition inline-flex items-center"
             >
               <ArrowLeft className="w-5 h-5 mr-2" />
               Continue Shopping
@@ -79,7 +79,18 @@ const CartPage = () => {
                   className="bg-white rounded-2xl p-6 shadow-md hover:shadow-lg transition flex items-center gap-6"
                 >
                   {/* Product Image */}
-                  <div className="shrink-0">
+                  <div className="relative shrink-0">
+                    <button
+                      onClick={() => toggleWishlist(item)}
+                      className="absolute top-3 right-3 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white/95 shadow-md ring-1 ring-black/5 transition-all duration-300 hover:scale-105 hover:bg-white"
+                      aria-label={isInWishlist(item.id) ? 'Remove from wishlist' : 'Add to wishlist'}
+                    >
+                      <Heart
+                        className={`h-4 w-4 transition-all duration-300 ${
+                          isInWishlist(item.id) ? 'fill-pink-500 text-pink-500' : 'text-slate-500'
+                        }`}
+                      />
+                    </button>
                     <img
                       src={item.image}
                       alt={item.name}
@@ -104,18 +115,18 @@ const CartPage = () => {
                     <div className="flex items-center border-2 border-amber-200 rounded-lg">
                       <button
                         onClick={() => handleQuantityChange(item.id, item.quantity - 1)}
-                        className="p-2 hover:bg-amber-50 transition"
+                        className="p-2 bg-amber-700 hover:bg-amber-800 transition"
                       >
-                        <Minus className="w-4 h-4 text-amber-700" />
+                        <Minus className="w-4 h-4 text-white" />
                       </button>
                       <span className="px-4 py-2 font-semibold text-amber-900 min-w-12 text-center">
                         {item.quantity}
                       </span>
                       <button
                         onClick={() => handleQuantityChange(item.id, item.quantity + 1)}
-                        className="p-2 hover:bg-amber-50 transition"
+                        className="p-2 bg-amber-700 hover:bg-amber-800 transition"
                       >
-                        <Plus className="w-4 h-4 text-amber-700" />
+                        <Plus className="w-4 h-4 text-white" />
                       </button>
                     </div>
 
@@ -173,7 +184,7 @@ const CartPage = () => {
                   </div>
                 </div>
 
-                <button className="w-full bg-gradient-to-r from-amber-300 to-orange-400 text-white py-4 rounded-xl font-bold text-lg hover:shadow-lg hover:shadow-amber-300 transition mb-3">
+                <button className="w-full bg-linear-to-r from-amber-300 to-orange-400 text-white py-4 rounded-xl font-bold text-lg hover:shadow-lg hover:shadow-amber-300 transition mb-3">
                   Proceed to Checkout
                 </button>
 

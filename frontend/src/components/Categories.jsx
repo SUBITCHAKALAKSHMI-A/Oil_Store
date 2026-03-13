@@ -1,5 +1,6 @@
 import React from "react";
 import { Droplet, Wheat, Flame } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import coconutImage from "../assets/coconut.jpg";
 import oliveImage from "../assets/olive.jpg";
 import groundnutImage from "../assets/groundnut.jpg";
@@ -10,6 +11,7 @@ import almondImage from "../assets/almond.jpg";
 import castorImage from "../assets/castor.jpg";
 
 const Categories = () => {
+  const navigate = useNavigate();
   const categories = [
     { name: "Olive Oil", icon: <Droplet className="w-6 h-6" />, color: "from-green-50 to-green-100", textColor: "text-green-700", image: oliveImage },
     { name: "Coconut Oil", icon: <Wheat className="w-6 h-6" />, color: "from-amber-50 to-amber-100", textColor: "text-amber-700", image: coconutImage },
@@ -36,6 +38,7 @@ const Categories = () => {
         {categories.map((cat, idx) => (
           <div
             key={idx}
+            onClick={() => navigate(`/search?q=${encodeURIComponent(cat.name)}`)}
             className="group cursor-pointer relative overflow-hidden rounded-3xl shadow-lg hover:shadow-2xl transition"
           >
             <div className="relative h-48">

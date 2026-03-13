@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Heart, ShoppingCart, ArrowLeft, Trash2 } from 'lucide-react';
+import { Heart, ShoppingCart, ArrowLeft } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import Navbar from '../components/Navbar';
@@ -33,7 +33,7 @@ const WishlistPage = () => {
             <p className="text-amber-600 mb-8">Save your favorite products here!</p>
             <button
               onClick={() => navigate('/')}
-              className="bg-gradient-to-r from-amber-300 to-orange-400 text-white px-8 py-3 rounded-full font-semibold hover:shadow-lg hover:shadow-amber-300 transition inline-flex items-center"
+              className="bg-linear-to-r from-amber-300 to-orange-400 text-white px-8 py-3 rounded-full font-semibold hover:shadow-lg hover:shadow-amber-300 transition inline-flex items-center"
             >
               <ArrowLeft className="w-5 h-5 mr-2" />
               Continue Shopping
@@ -72,14 +72,14 @@ const WishlistPage = () => {
                 key={product.id}
                 className="group bg-white rounded-3xl p-5 shadow-md hover:shadow-2xl transition border border-amber-100 hover:border-amber-300 relative"
               >
-                <button
-                  onClick={() => removeFromWishlist(product.id)}
-                  className="absolute top-4 right-4 z-10 w-10 h-10 bg-red-100 rounded-full flex items-center justify-center hover:bg-red-200 transition shadow-md"
-                >
-                  <Trash2 className="w-5 h-5 text-red-600" />
-                </button>
-
                 <div className="relative mb-4 overflow-hidden rounded-2xl">
+                  <button
+                    onClick={() => removeFromWishlist(product.id)}
+                    className="absolute top-3 right-3 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-white/95 shadow-md ring-1 ring-black/5 transition-all duration-300 hover:scale-105 hover:bg-white"
+                    aria-label="Remove from wishlist"
+                  >
+                    <Heart className="h-5 w-5 fill-pink-500 text-pink-500" />
+                  </button>
                   <img
                     src={product.image}
                     alt={product.name}
@@ -96,7 +96,7 @@ const WishlistPage = () => {
 
                 <button
                   onClick={() => handleAddToCart(product)}
-                  className="w-full bg-gradient-to-r from-amber-300 to-orange-400 text-white py-3 rounded-xl font-semibold hover:shadow-lg hover:shadow-amber-300 transition flex items-center justify-center"
+                  className="w-full bg-linear-to-r from-amber-300 to-orange-400 text-white py-3 rounded-xl font-semibold hover:shadow-lg hover:shadow-amber-300 transition flex items-center justify-center"
                 >
                   <ShoppingCart className="w-4 h-4 mr-2" strokeWidth={2} />
                   Add to Cart
