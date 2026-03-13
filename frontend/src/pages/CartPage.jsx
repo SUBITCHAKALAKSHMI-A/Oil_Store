@@ -23,6 +23,11 @@ const CartPage = () => {
     }
   };
 
+  const handleCheckout = () => {
+    if (!cartItems.length) return;
+    navigate('/checkout', { state: { from: 'cart', items: cartItems } });
+  };
+
   const formatPrice = (price) => {
     return parseFloat(price.replace('₹', '').replace(',', '')).toFixed(2);
   };
@@ -184,7 +189,10 @@ const CartPage = () => {
                   </div>
                 </div>
 
-                <button className="w-full bg-linear-to-r from-amber-300 to-orange-400 text-white py-4 rounded-xl font-bold text-lg hover:shadow-lg hover:shadow-amber-300 transition mb-3">
+                <button
+                  onClick={handleCheckout}
+                  className="w-full bg-linear-to-r from-amber-300 to-orange-400 text-white py-4 rounded-xl font-bold text-lg hover:shadow-lg hover:shadow-amber-300 transition mb-3"
+                >
                   Proceed to Checkout
                 </button>
 

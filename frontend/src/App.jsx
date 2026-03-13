@@ -20,6 +20,7 @@ import ManageCategories from './pages/ManageCategories';
 import Analytics from './pages/Analytics';
 import Settings from './pages/Settings';
 import ProductDetailPage from './pages/ProductDetailPage';
+import CheckoutPage from './pages/CheckoutPage';
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
               <Route path="/wishlist" element={<WishlistPage />} />
               <Route path="/search" element={<SearchPage />} />
               <Route path="/product/:id" element={<ProductDetailPage />} />
+              <Route path="/checkout" element={<CheckoutPage />} />
           
           {/* Protected User Routes */}
           <Route 

@@ -80,10 +80,21 @@ const ProductDetailPage = () => {
       navigate("/login");
       return;
     }
-    for (let i = 0; i < quantity; i++) {
-      addToCart(product);
-    }
-    navigate("/cart");
+    const checkoutItem = {
+      id: product._id || product.id,
+      name: product.name,
+      price: typeof product.price === 'number' ? `₹${product.price}` : product.price,
+      oldPrice: product.oldPrice
+        ? typeof product.oldPrice === 'number'
+          ? `₹${product.oldPrice}`
+          : product.oldPrice
+        : null,
+      image: product.images && product.images.length > 0
+        ? `http://localhost:5000${product.images[0]}`
+        : 'https://via.placeholder.com/400x300?text=No+Image',
+      quantity,
+    };
+    navigate('/checkout', { state: { from: 'buy-now', items: [checkoutItem] } });
   };
 
   const handleShare = () => {
