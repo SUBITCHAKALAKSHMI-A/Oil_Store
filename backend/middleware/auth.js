@@ -2,6 +2,9 @@ import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
 import Admin from '../models/Admin.js';
 
+// Use env secret if available, otherwise fall back to a dev-safe default
+const JWT_SECRET = process.env.JWT_SECRET || 'dev_fallback_jwt_secret_change_me';
+
 // Verify JWT Token
 export const verifyToken = async (req, res, next) => {
   try {
@@ -14,7 +17,7 @@ export const verifyToken = async (req, res, next) => {
       });
     }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, JWT_SECRET);
     req.user = decoded;
     next();
   } catch (error) {
@@ -87,7 +90,7 @@ export const isAdmin = async (req, res, next) => {
 export const generateToken = (id, role) => {
   return jwt.sign(
     { id, role },
-    process.env.JWT_SECRET,
+    JWT_SECRET,
     { expiresIn: '7d' }
   );
 };

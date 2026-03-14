@@ -130,7 +130,47 @@ router.get('/search/query', async (req, res) => {
 // Create product (Admin only)
 router.post('/', isAdmin, async (req, res) => {
   try {
-    const product = new Product(req.body);
+    // Normalize and clean incoming data to avoid validation errors
+    const {
+      name,
+      description,
+      price,
+      oldPrice,
+      category,
+      brand,
+      size,
+      unit,
+      images,
+      stockQuantity,
+      badge,
+      featured
+    } = req.body;
+
+    const productData = {
+      name,
+      description,
+      // Ensure numeric fields are numbers
+      price: Number(price),
+      // Optional numeric fields: treat empty string as undefined/0
+      oldPrice: oldPrice !== '' && oldPrice !== undefined ? Number(oldPrice) : undefined,
+      brand,
+      size,
+      unit,
+      images: images || [],
+      stockQuantity:
+        stockQuantity !== '' && stockQuantity !== undefined
+          ? Number(stockQuantity)
+          : 0,
+      badge,
+      featured: !!featured
+    };
+
+    // Only set category if a valid value is provided
+    if (category) {
+      productData.category = category;
+    }
+
+    const product = new Product(productData);
     await product.save();
 
     res.status(201).json({

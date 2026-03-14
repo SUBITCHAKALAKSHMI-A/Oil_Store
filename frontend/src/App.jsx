@@ -21,6 +21,7 @@ import Analytics from './pages/Analytics';
 import Settings from './pages/Settings';
 import ProductDetailPage from './pages/ProductDetailPage';
 import CheckoutPage from './pages/CheckoutPage';
+import OrderConfirmation from './pages/OrderConfirmation';
 
 function App() {
   return (
@@ -38,6 +39,14 @@ function App() {
               <Route path="/search" element={<SearchPage />} />
               <Route path="/product/:id" element={<ProductDetailPage />} />
               <Route path="/checkout" element={<CheckoutPage />} />
+              <Route
+                path="/order/confirmation"
+                element={
+                  <ProtectedRoute requiredRole="user">
+                    <OrderConfirmation />
+                  </ProtectedRoute>
+                }
+              />
           
           {/* Protected User Routes */}
           <Route 

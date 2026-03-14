@@ -5,6 +5,7 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
+import paymentService from '../services/paymentService';
 
 const CheckoutPage = () => {
   const navigate = useNavigate();
@@ -14,6 +15,10 @@ const CheckoutPage = () => {
 
   const incomingItems = location.state?.items;
   const [checkoutItems, setCheckoutItems] = useState([]);
+  const [fullName, setFullName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [email, setEmail] = useState('');
+  const [address, setAddress] = useState('');
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -51,6 +56,94 @@ const CheckoutPage = () => {
   const tax = subtotal * 0.05;
   const total = subtotal + tax;
 
+  const loadRazorpayScript = () => {
+    return new Promise((resolve) => {
+      if (document.getElementById('razorpay-sdk')) {
+        resolve(true);
+        return;
+      }
+      const script = document.createElement('script');
+      script.id = 'razorpay-sdk';
+      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
+      document.body.appendChild(script);
+    });
+  };
+
+  const handlePayNow = async () => {
+    try {
+      const ok = await loadRazorpayScript();
+      if (!ok) {
+        alert('Razorpay SDK failed to load. Please check your connection.');
+        return;
+      }
+
+      // Create order on backend
+      const orderRes = await paymentService.createOrder(total);
+      if (!orderRes.success) {
+        alert('Error creating payment order: ' + (orderRes.message || 'Unknown error'));
+        return;
+      }
+
+      const { order } = orderRes;
+
+      const options = {
+        key: import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_placeholder',
+        amount: order.amount,
+        currency: order.currency,
+        name: 'GoldenDrops',
+        description: 'Order Payment',
+        order_id: order.id,
+        prefill: {
+          name: fullName || user?.name || '',
+          email: email || user?.email || '',
+        },
+        handler: async function (response) {
+          const verifyPayload = {
+            razorpay_order_id: response.razorpay_order_id,
+            razorpay_payment_id: response.razorpay_payment_id,
+            razorpay_signature: response.razorpay_signature,
+            // Minimal order data; you can extend this structure later
+            items: checkoutItems.map((item) => ({
+              productId: item.id,
+              name: item.name,
+              price: parsePrice(item.price),
+              quantity: item.quantity,
+            })),
+            totalAmount: total,
+            shippingAddress: {
+              name: fullName || user?.name || '',
+              phone,
+              street: address,
+              city: '',
+              state: '',
+              zipCode: '',
+              country: 'India',
+            },
+          };
+
+          const verifyRes = await paymentService.verifyPayment(verifyPayload);
+          if (verifyRes.success) {
+            const order = verifyRes.order;
+            navigate('/order/confirmation', { state: { order } });
+          } else {
+            alert('Payment verification failed: ' + (verifyRes.message || 'Unknown error'));
+          }
+        },
+        theme: {
+          color: '#f97316',
+        },
+      };
+
+      const rzp = new window.Razorpay(options);
+      rzp.open();
+    } catch (error) {
+      console.error('Payment error', error);
+      alert('Error initiating payment. Please try again.');
+    }
+  };
+
   return (
     <>
       <Navbar />
@@ -73,23 +166,36 @@ const CheckoutPage = () => {
                 <input
                   className="border border-amber-200 rounded-lg px-4 py-3"
                   placeholder="Full Name"
-                  defaultValue={user?.name || ''}
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
                 />
-                <input className="border border-amber-200 rounded-lg px-4 py-3" placeholder="Phone Number" />
+                <input
+                  className="border border-amber-200 rounded-lg px-4 py-3"
+                  placeholder="Phone Number"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                />
               </div>
               <input
                 className="w-full border border-amber-200 rounded-lg px-4 py-3 mb-6"
                 placeholder="Email Address"
-                defaultValue={user?.email || ''}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
 
               <h2 className="text-lg font-semibold text-amber-900 mb-3">Delivery Address</h2>
               <textarea
                 className="w-full border border-amber-200 rounded-lg px-4 py-3 min-h-28 mb-6"
                 placeholder="Enter your complete delivery address"
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
               />
 
-              <button className="w-full bg-pink-500 hover:bg-pink-600 text-white py-3 rounded-lg font-bold transition">
+              <button
+                className="w-full bg-pink-500 hover:bg-pink-600 text-white py-3 rounded-lg font-bold transition"
+                type="button"
+                onClick={handlePayNow}
+              >
                 Pay Now - ₹{total.toLocaleString('en-IN', { maximumFractionDigits: 2 })}
               </button>
             </div>

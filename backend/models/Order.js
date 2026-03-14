@@ -70,8 +70,8 @@ const orderSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// Generate order number before saving
-orderSchema.pre('save', async function(next) {
+// Generate order number before validation so "required" does not fail
+orderSchema.pre('validate', async function(next) {
   if (!this.orderNumber) {
     const count = await mongoose.model('Order').countDocuments();
     this.orderNumber = `ORD${Date.now()}${count + 1}`;
