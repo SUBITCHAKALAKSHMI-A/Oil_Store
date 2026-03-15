@@ -1,9 +1,23 @@
 import express from 'express';
+import Razorpay from 'razorpay';
 import { isAuth } from '../middleware/auth.js';
 import Product from '../models/Product.js';
 import Category from '../models/Category.js';
+import Order from '../models/Order.js';
 
 const router = express.Router();
+
+// Razorpay instance for refunds (uses same env vars as payment routes)
+const razorpayKeyId = process.env.RAZORPAY_KEY_ID;
+const razorpayKeySecret = process.env.RAZORPAY_KEY_SECRET;
+
+let razorpay = null;
+if (razorpayKeyId && razorpayKeySecret) {
+  razorpay = new Razorpay({
+    key_id: razorpayKeyId,
+    key_secret: razorpayKeySecret,
+  });
+}
 
 // Get user profile
 router.get('/profile', isAuth, async (req, res) => {
@@ -188,6 +202,134 @@ router.get('/products/search', async (req, res) => {
       success: false,
       message: 'Error searching products',
       error: error.message
+    });
+  }
+});
+
+// Get orders for the logged-in user
+router.get('/orders', isAuth, async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    const orders = await Order.find({ user: userId })
+      .populate('items.product', 'name images')
+      .sort({ createdAt: -1 });
+
+    const totalOrders = orders.length;
+    const deliveredOrders = orders.filter(order => order.status === 'delivered').length;
+    const totalSpent = orders
+      .filter(order => order.paymentStatus === 'paid' && order.status !== 'cancelled')
+      .reduce((sum, order) => sum + (order.totalAmount || 0), 0);
+
+    res.json({
+      success: true,
+      count: orders.length,
+      orders,
+      summary: {
+        totalOrders,
+        deliveredOrders,
+        totalSpent
+      }
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Error fetching user orders',
+      error: error.message
+    });
+  }
+});
+
+// Get single order for the logged-in user
+router.get('/orders/:id', isAuth, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { id } = req.params;
+
+    const order = await Order.findOne({ _id: id, user: userId })
+      .populate('items.product', 'name images description');
+
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        message: 'Order not found',
+      });
+    }
+
+    res.json({
+      success: true,
+      order,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Error fetching order details',
+      error: error.message,
+    });
+  }
+});
+
+// Cancel an order for the logged-in user (only pending/processing)
+router.post('/orders/:id/cancel', isAuth, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { id } = req.params;
+    const { reason } = req.body;
+
+    const order = await Order.findOne({ _id: id, user: userId });
+
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        message: 'Order not found',
+      });
+    }
+
+    if (order.status === 'shipped' || order.status === 'delivered' || order.status === 'cancelled') {
+      return res.status(400).json({
+        success: false,
+        message: 'This order can no longer be cancelled',
+      });
+    }
+    // If payment was made online, attempt a Razorpay refund
+    if (order.paymentStatus === 'paid' && order.paymentMethod !== 'cod' && order.paymentId && razorpay) {
+      try {
+        const amountPaise = Math.round((order.totalAmount || 0) * 100);
+
+        const refund = await razorpay.payments.refund(order.paymentId, {
+          amount: amountPaise,
+        });
+
+        order.paymentStatus = 'refunded';
+        order.refundId = refund.id;
+      } catch (refundError) {
+        console.error('Error processing refund for order', order._id, refundError);
+        return res.status(502).json({
+          success: false,
+          message: 'Unable to process refund at this time. Please try again later or contact support.',
+        });
+      }
+    }
+
+    order.status = 'cancelled';
+    order.cancelReason = reason || 'Cancelled by user';
+    order.cancelledAt = new Date();
+    order.cancelledBy = 'user';
+
+    await order.save();
+
+    res.json({
+      success: true,
+      message: order.paymentStatus === 'refunded'
+        ? 'Order cancelled and payment refunded successfully'
+        : 'Order cancelled successfully',
+      order,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Error cancelling order',
+      error: error.message,
     });
   }
 });

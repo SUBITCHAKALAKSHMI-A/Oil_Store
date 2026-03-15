@@ -8,6 +8,8 @@ import UserSignupPage from './pages/UserSignupPage';
 import AdminSignupPage from './pages/AdminSignupPage';
 import UserDashboard from './pages/UserDashboard';
 import UserProfile from './pages/UserProfile';
+import MyOrders from './pages/MyOrders';
+import OrderDetails from './pages/OrderDetails';
 import AdminDashboard from './pages/AdminDashboard';
 import CartPage from './pages/CartPage';
 import WishlistPage from './pages/WishlistPage';
@@ -62,6 +64,22 @@ function App() {
             element={
               <ProtectedRoute requiredRole="user">
                 <UserProfile />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/user/orders" 
+            element={
+              <ProtectedRoute requiredRole="user">
+                <MyOrders />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/user/orders/:orderId" 
+            element={
+              <ProtectedRoute requiredRole="user">
+                <OrderDetails />
               </ProtectedRoute>
             } 
           />

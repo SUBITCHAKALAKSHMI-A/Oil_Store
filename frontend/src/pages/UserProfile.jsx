@@ -1,21 +1,57 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ShoppingBag, Package, Heart, MapPin, Edit2, ShoppingCart, Mail, Phone } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import orderService from '../services/orderService';
 
 const UserProfile = () => {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
   const { getWishlistCount } = useCart();
   const [isEditing, setIsEditing] = useState({ name: false, phone: false });
+  const [orders, setOrders] = useState([]);
+  const [orderSummary, setOrderSummary] = useState({
+    totalOrders: 0,
+    deliveredOrders: 0,
+    totalSpent: 0,
+  });
+  const [loadingOrders, setLoadingOrders] = useState(false);
 
   const handleLogout = () => {
     logout();
     navigate('/login');
   };
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      setLoadingOrders(true);
+      try {
+        const data = await orderService.getMyOrders();
+        if (data?.success) {
+          setOrders(data.orders || []);
+          setOrderSummary(data.summary || {
+            totalOrders: data.count || 0,
+            deliveredOrders: 0,
+            totalSpent: 0,
+          });
+        } else {
+          setOrders([]);
+          setOrderSummary({ totalOrders: 0, deliveredOrders: 0, totalSpent: 0 });
+        }
+      } catch (error) {
+        console.error('Error loading user orders:', error);
+        setOrders([]);
+        setOrderSummary({ totalOrders: 0, deliveredOrders: 0, totalSpent: 0 });
+      } finally {
+        setLoadingOrders(false);
+      }
+    };
+
+    fetchOrders();
+  }, []);
 
   // Get user initials for avatar
   const getInitials = (name) => {
@@ -29,6 +65,24 @@ const UserProfile = () => {
     month: 'short', 
     year: 'numeric' 
   });
+
+  const formatCurrency = (amount) => {
+    if (!amount) return '₹0';
+    return `₹${amount.toLocaleString('en-IN', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
+  };
+
+  const getStatusBadgeClasses = (status) => {
+    const map = {
+      pending: 'bg-yellow-100 text-yellow-800',
+      processing: 'bg-blue-100 text-blue-800',
+      shipped: 'bg-purple-100 text-purple-800',
+      delivered: 'bg-green-100 text-green-800',
+      cancelled: 'bg-red-100 text-red-800',
+    };
+    return map[status] || 'bg-gray-100 text-gray-800';
+  };
+
+  const recentOrders = orders.slice(0, 3);
 
   return (
     <>
@@ -78,7 +132,9 @@ const UserProfile = () => {
               <div className="inline-flex items-center justify-center w-14 h-14 bg-pink-50 rounded-full mb-3">
                 <ShoppingBag className="w-7 h-7 text-pink-500" />
               </div>
-              <h3 className="text-3xl font-bold text-gray-900 mb-1">0</h3>
+              <h3 className="text-3xl font-bold text-gray-900 mb-1">
+                {loadingOrders ? '-' : orderSummary.totalOrders}
+              </h3>
               <p className="text-gray-500 text-sm">Total Orders</p>
             </div>
 
@@ -87,7 +143,9 @@ const UserProfile = () => {
               <div className="inline-flex items-center justify-center w-14 h-14 bg-pink-50 rounded-full mb-3">
                 <Package className="w-7 h-7 text-pink-500" />
               </div>
-              <h3 className="text-3xl font-bold text-gray-900 mb-1">₹0</h3>
+              <h3 className="text-3xl font-bold text-gray-900 mb-1">
+                {loadingOrders ? '-' : formatCurrency(orderSummary.totalSpent)}
+              </h3>
               <p className="text-gray-500 text-sm">Total Spent</p>
             </div>
 
@@ -105,7 +163,9 @@ const UserProfile = () => {
               <div className="inline-flex items-center justify-center w-14 h-14 bg-pink-50 rounded-full mb-3">
                 <MapPin className="w-7 h-7 text-pink-500" />
               </div>
-              <h3 className="text-3xl font-bold text-gray-900 mb-1">0</h3>
+              <h3 className="text-3xl font-bold text-gray-900 mb-1">
+                {loadingOrders ? '-' : orderSummary.deliveredOrders}
+              </h3>
               <p className="text-gray-500 text-sm">Delivered</p>
             </div>
           </div>
@@ -173,31 +233,75 @@ const UserProfile = () => {
                   <ShoppingBag className="w-5 h-5 text-gray-700" />
                   <h2 className="text-xl font-bold text-gray-900">Recent Orders</h2>
                 </div>
-                <button className="text-sm text-gray-900 hover:text-pink-500 font-medium transition">
+                <button
+                  onClick={() => navigate('/user/orders')}
+                  className="text-sm text-gray-900 hover:text-pink-500 font-medium transition"
+                >
                   View All
                 </button>
               </div>
 
-              {/* Empty State */}
-              <div className="text-center py-12">
-                <div className="inline-flex items-center justify-center w-20 h-20 bg-gray-50 rounded-full mb-4">
-                  <ShoppingBag className="w-10 h-10 text-gray-300" />
+              {loadingOrders ? (
+                <div className="text-center py-12 text-gray-500 text-sm">Loading orders...</div>
+              ) : recentOrders.length === 0 ? (
+                <div className="text-center py-12">
+                  <div className="inline-flex items-center justify-center w-20 h-20 bg-gray-50 rounded-full mb-4">
+                    <ShoppingBag className="w-10 h-10 text-gray-300" />
+                  </div>
+                  <p className="text-gray-500 mb-4">No orders yet</p>
+                  <button
+                    onClick={() => navigate('/')}
+                    className="text-pink-500 hover:text-pink-600 font-medium transition"
+                  >
+                    Start Shopping
+                  </button>
                 </div>
-                <p className="text-gray-500 mb-4">No orders yet</p>
-                <button
-                  onClick={() => navigate('/')}
-                  className="text-pink-500 hover:text-pink-600 font-medium transition"
-                >
-                  Start Shopping
-                </button>
-              </div>
+              ) : (
+                <div className="space-y-4">
+                  {recentOrders.map((order) => (
+                    <div
+                      key={order._id}
+                      onClick={() => navigate(`/user/orders/${order._id}`)}
+                      className="border border-gray-100 rounded-2xl p-4 flex items-center justify-between hover:shadow-sm transition cursor-pointer"
+                    >
+                      <div>
+                        <p className="text-sm text-gray-500 mb-1">Order #{order.orderNumber}</p>
+                        <p className="text-sm text-gray-400 mb-1">
+                          {new Date(order.createdAt).toLocaleDateString('en-IN', {
+                            day: 'numeric',
+                            month: 'short',
+                            year: 'numeric',
+                          })}
+                        </p>
+                        <p className="text-sm text-gray-700">
+                          {order.items && order.items.length > 0
+                            ? `${order.items[0].name || order.items[0].product?.name || 'Product'}$${order.items.length > 1 ? ` + ${order.items.length - 1} more` : ''}`
+                            : 'No items'}
+                        </p>
+                      </div>
+                      <div className="text-right space-y-2">
+                        <span
+                          className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${getStatusBadgeClasses(
+                            order.status,
+                          )}`}
+                        >
+                          {order.status ? order.status.charAt(0).toUpperCase() + order.status.slice(1) : 'Pending'}
+                        </span>
+                        <p className="text-sm font-semibold text-gray-900">
+                          {formatCurrency(order.totalAmount)}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
 
           {/* Action Buttons */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
             <button
-              onClick={() => navigate('/')}
+              onClick={() => navigate('/user/orders')}
               className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition text-center group"
             >
               <div className="inline-flex items-center justify-center w-12 h-12 bg-gray-50 group-hover:bg-pink-50 rounded-xl mb-3 transition">

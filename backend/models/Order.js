@@ -57,6 +57,10 @@ const orderSchema = new mongoose.Schema({
     type: String,
     trim: true
   },
+  refundId: {
+    type: String,
+    trim: true
+  },
   shippingAddress: {
     name: String,
     phone: String,
@@ -72,6 +76,18 @@ const orderSchema = new mongoose.Schema({
   },
   notes: {
     type: String,
+    trim: true
+  },
+  cancelReason: {
+    type: String,
+    trim: true
+  },
+  cancelledAt: {
+    type: Date
+  },
+  cancelledBy: {
+    type: String,
+    enum: ['user', 'admin'],
     trim: true
   },
   deliveredAt: {

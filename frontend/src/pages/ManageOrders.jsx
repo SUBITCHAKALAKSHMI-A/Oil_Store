@@ -200,6 +200,16 @@ const ManageOrders = () => {
                           Paid on {new Date(order.paidAt).toLocaleString()}
                         </p>
                       )}
+                      {order.paymentStatus === 'refunded' && order.refundId && (
+                        <p className="text-xs text-blue-700 mt-1 break-all">
+                          Refund ID: {order.refundId}
+                        </p>
+                      )}
+                      {order.status === 'cancelled' && order.cancelReason && (
+                        <p className="text-xs text-red-600 mt-1 max-w-md">
+                          Cancel reason: {order.cancelReason}
+                        </p>
+                      )}
                     </div>
                     <select
                       value={order.status}
