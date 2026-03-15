@@ -11,7 +11,7 @@ const CheckoutPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { isAuthenticated, user } = useAuth();
-  const { cartItems } = useCart();
+  const { cartItems, clearCart } = useCart();
 
   const incomingItems = location.state?.items;
   const [checkoutItems, setCheckoutItems] = useState([]);
@@ -19,6 +19,7 @@ const CheckoutPage = () => {
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
   const [address, setAddress] = useState('');
+  const [isPaying, setIsPaying] = useState(false);
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -38,6 +39,11 @@ const CheckoutPage = () => {
 
     navigate('/cart');
   }, [isAuthenticated, navigate, incomingItems, cartItems]);
+
+  useEffect(() => {
+    setFullName(user?.name || '');
+    setEmail(user?.email || '');
+  }, [user]);
 
   const parsePrice = (price) => {
     if (typeof price === 'number') return price;
@@ -72,9 +78,21 @@ const CheckoutPage = () => {
   };
 
   const handlePayNow = async () => {
+    if (checkoutItems.length === 0) {
+      alert('Your cart is empty. Please add products before checkout.');
+      return;
+    }
+
+    if (!fullName.trim() || !phone.trim() || !email.trim() || !address.trim()) {
+      alert('Please fill in your name, phone, email, and delivery address.');
+      return;
+    }
+
     try {
+      setIsPaying(true);
       const ok = await loadRazorpayScript();
       if (!ok) {
+        setIsPaying(false);
         alert('Razorpay SDK failed to load. Please check your connection.');
         return;
       }
@@ -82,6 +100,7 @@ const CheckoutPage = () => {
       // Create order on backend
       const orderRes = await paymentService.createOrder(total);
       if (!orderRes.success) {
+        setIsPaying(false);
         alert('Error creating payment order: ' + (orderRes.message || 'Unknown error'));
         return;
       }
@@ -104,7 +123,6 @@ const CheckoutPage = () => {
             razorpay_order_id: response.razorpay_order_id,
             razorpay_payment_id: response.razorpay_payment_id,
             razorpay_signature: response.razorpay_signature,
-            // Minimal order data; you can extend this structure later
             items: checkoutItems.map((item) => ({
               productId: item.id,
               name: item.name,
@@ -126,10 +144,22 @@ const CheckoutPage = () => {
           const verifyRes = await paymentService.verifyPayment(verifyPayload);
           if (verifyRes.success) {
             const order = verifyRes.order;
+
+            if (location.state?.from === 'cart') {
+              clearCart();
+            }
+
             navigate('/order/confirmation', { state: { order } });
           } else {
             alert('Payment verification failed: ' + (verifyRes.message || 'Unknown error'));
           }
+
+          setIsPaying(false);
+        },
+        modal: {
+          ondismiss: () => {
+            setIsPaying(false);
+          },
         },
         theme: {
           color: '#f97316',
@@ -141,6 +171,7 @@ const CheckoutPage = () => {
     } catch (error) {
       console.error('Payment error', error);
       alert('Error initiating payment. Please try again.');
+      setIsPaying(false);
     }
   };
 
@@ -192,11 +223,14 @@ const CheckoutPage = () => {
               />
 
               <button
-                className="w-full bg-pink-500 hover:bg-pink-600 text-white py-3 rounded-lg font-bold transition"
+                className="w-full bg-pink-500 hover:bg-pink-600 disabled:bg-pink-300 disabled:cursor-not-allowed text-white py-3 rounded-lg font-bold transition"
                 type="button"
                 onClick={handlePayNow}
+                disabled={isPaying}
               >
-                Pay Now - ₹{total.toLocaleString('en-IN', { maximumFractionDigits: 2 })}
+                {isPaying
+                  ? 'Processing Payment...'
+                  : `Pay Now - ₹${total.toLocaleString('en-IN', { maximumFractionDigits: 2 })}`}
               </button>
             </div>
 

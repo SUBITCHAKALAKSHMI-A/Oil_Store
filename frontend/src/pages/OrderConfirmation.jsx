@@ -41,6 +41,9 @@ const OrderConfirmation = () => {
     });
 
   const { shippingAddress = {} } = order;
+  const paymentStatus = order.paymentStatus || 'pending';
+  const paymentLabel = paymentStatus.charAt(0).toUpperCase() + paymentStatus.slice(1);
+  const orderStatusLabel = order.status ? order.status.charAt(0).toUpperCase() + order.status.slice(1) : 'Pending';
 
   return (
     <>
@@ -54,6 +57,21 @@ const OrderConfirmation = () => {
             <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4 mb-6">
               <p className="text-emerald-700 font-semibold">Order Number</p>
               <p className="text-xl font-bold text-emerald-900 mt-1">{order.orderNumber}</p>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-4 mb-6">
+              <div className="bg-amber-50 border border-amber-100 rounded-xl p-4">
+                <p className="text-sm text-amber-700">Payment Status</p>
+                <p className="text-lg font-bold text-amber-900 mt-1">{paymentLabel}</p>
+              </div>
+              <div className="bg-amber-50 border border-amber-100 rounded-xl p-4">
+                <p className="text-sm text-amber-700">Order Status</p>
+                <p className="text-lg font-bold text-amber-900 mt-1">{orderStatusLabel}</p>
+              </div>
+              <div className="bg-amber-50 border border-amber-100 rounded-xl p-4">
+                <p className="text-sm text-amber-700">Payment Method</p>
+                <p className="text-lg font-bold text-amber-900 mt-1">{String(order.paymentMethod || 'card').toUpperCase()}</p>
+              </div>
             </div>
 
             <div className="grid md:grid-cols-2 gap-6 mb-6">
@@ -79,6 +97,25 @@ const OrderConfirmation = () => {
                   <li>📦 Preparing for shipment</li>
                   <li>🚚 Estimated delivery: <span className="font-semibold">{formatDate(estimatedDate)}</span></li>
                 </ul>
+              </div>
+            </div>
+
+            <div className="mb-6">
+              <h2 className="text-lg font-semibold text-amber-900 mb-3">Ordered Items</h2>
+              <div className="space-y-3">
+                {(order.items || []).map((item, index) => (
+                  <div key={`${item.product || item.name}-${index}`} className="flex items-center justify-between rounded-xl border border-amber-100 bg-amber-50/60 px-4 py-3">
+                    <div>
+                      <p className="font-semibold text-amber-900">{item.name}</p>
+                      <p className="text-sm text-amber-700">Quantity: {item.quantity}</p>
+                    </div>
+                    <p className="font-bold text-amber-900">
+                      ₹{Number(item.subtotal || item.price * item.quantity || 0).toLocaleString('en-IN', {
+                        maximumFractionDigits: 2,
+                      })}
+                    </p>
+                  </div>
+                ))}
               </div>
             </div>
 

@@ -10,11 +10,36 @@ const router = express.Router();
 // Get admin dashboard stats
 router.get('/stats', isAdmin, async (req, res) => {
   try {
-    const totalUsers = await User.countDocuments();
-    const activeUsers = await User.countDocuments({ isActive: true });
-    const totalProducts = await Product.countDocuments();
-    const totalOrders = await Order.countDocuments();
-    const totalCategories = await Category.countDocuments();
+    const [
+      totalUsers,
+      activeUsers,
+      totalProducts,
+      totalOrders,
+      totalCategories,
+      revenueResult
+    ] = await Promise.all([
+      User.countDocuments(),
+      User.countDocuments({ isActive: true }),
+      Product.countDocuments(),
+      Order.countDocuments(),
+      Category.countDocuments(),
+      Order.aggregate([
+        {
+          $match: {
+            paymentStatus: 'paid',
+            status: { $ne: 'cancelled' }
+          }
+        },
+        {
+          $group: {
+            _id: null,
+            totalRevenue: { $sum: '$totalAmount' }
+          }
+        }
+      ])
+    ]);
+
+    const totalRevenue = revenueResult[0]?.totalRevenue || 0;
 
     res.json({
       success: true,
@@ -23,7 +48,9 @@ router.get('/stats', isAdmin, async (req, res) => {
         activeUsers,
         totalProducts,
         totalOrders,
-        totalCategories
+        totalCategories,
+        totalRevenue,
+        revenue: totalRevenue
       }
     });
   } catch (error) {

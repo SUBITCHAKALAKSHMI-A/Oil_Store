@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import authService from '../services/authService';
+import adminService from '../services/adminService';
 
 const AdminDashboard = () => {
   const [admin, setAdmin] = useState(null);
@@ -8,8 +9,9 @@ const AdminDashboard = () => {
     totalUsers: 0,
     totalOrders: 0,
     totalProducts: 0,
-    revenue: 0,
+    totalRevenue: 0,
   });
+  const [loadingStats, setLoadingStats] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -18,8 +20,32 @@ const AdminDashboard = () => {
       navigate('/login');
     } else {
       setAdmin(currentUser);
+      loadDashboardStats();
     }
   }, [navigate]);
+
+  const loadDashboardStats = async () => {
+    try {
+      setLoadingStats(true);
+      const data = await adminService.getDashboardStats();
+
+      if (!data.success) {
+        throw new Error(data.message || 'Failed to load dashboard stats');
+      }
+
+      setStats({
+        totalUsers: data.stats?.totalUsers || 0,
+        totalOrders: data.stats?.totalOrders || 0,
+        totalProducts: data.stats?.totalProducts || 0,
+        totalRevenue: data.stats?.totalRevenue || data.stats?.revenue || 0,
+      });
+    } catch (error) {
+      console.error('Error loading dashboard stats:', error);
+      alert('Failed to load dashboard stats');
+    } finally {
+      setLoadingStats(false);
+    }
+  };
 
   const handleLogout = () => {
     authService.logout();
@@ -60,7 +86,7 @@ const AdminDashboard = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600 mb-1">Total Users</p>
-                <p className="text-3xl font-bold text-gray-900">{stats.totalUsers}</p>
+                <p className="text-3xl font-bold text-gray-900">{loadingStats ? '...' : stats.totalUsers}</p>
                 <p className="text-xs text-green-600 mt-1">+12% from last month</p>
               </div>
               <div className="p-3 bg-blue-100 rounded-full">
@@ -75,7 +101,7 @@ const AdminDashboard = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600 mb-1">Total Orders</p>
-                <p className="text-3xl font-bold text-gray-900">{stats.totalOrders}</p>
+                <p className="text-3xl font-bold text-gray-900">{loadingStats ? '...' : stats.totalOrders}</p>
                 <p className="text-xs text-green-600 mt-1">+8% from last month</p>
               </div>
               <div className="p-3 bg-green-100 rounded-full">
@@ -90,7 +116,7 @@ const AdminDashboard = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600 mb-1">Total Products</p>
-                <p className="text-3xl font-bold text-gray-900">{stats.totalProducts}</p>
+                <p className="text-3xl font-bold text-gray-900">{loadingStats ? '...' : stats.totalProducts}</p>
                 <p className="text-xs text-green-600 mt-1">+5 new products</p>
               </div>
               <div className="p-3 bg-purple-100 rounded-full">
@@ -105,7 +131,9 @@ const AdminDashboard = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600 mb-1">Total Revenue</p>
-                <p className="text-3xl font-bold text-gray-900">${stats.revenue}</p>
+                <p className="text-3xl font-bold text-gray-900">
+                  {loadingStats ? '...' : `₹${Number(stats.totalRevenue || 0).toLocaleString('en-IN', { maximumFractionDigits: 2 })}`}
+                </p>
                 <p className="text-xs text-green-600 mt-1">+15% from last month</p>
               </div>
               <div className="p-3 bg-orange-100 rounded-full">

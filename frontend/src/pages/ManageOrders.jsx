@@ -51,6 +51,16 @@ const ManageOrders = () => {
     return colors[status] || 'bg-gray-100 text-gray-800';
   };
 
+  const getPaymentStatusColor = (status) => {
+    const colors = {
+      pending: 'bg-amber-100 text-amber-800',
+      paid: 'bg-emerald-100 text-emerald-800',
+      failed: 'bg-red-100 text-red-800',
+      refunded: 'bg-slate-100 text-slate-800'
+    };
+    return colors[status] || 'bg-gray-100 text-gray-800';
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -128,19 +138,27 @@ const ManageOrders = () => {
             ) : (
               filteredOrders.map((order) => (
                 <div key={order._id} className="bg-white rounded-lg shadow-md p-6">
-                  <div className="flex justify-between items-start mb-4">
+                  <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-4 mb-4">
                     <div>
                       <h3 className="text-lg font-bold text-gray-900">Order #{order.orderNumber}</h3>
                       <p className="text-sm text-gray-600">
                         Customer: {order.user?.name || 'N/A'} ({order.user?.email || 'N/A'})
                       </p>
+                      {order.shippingAddress?.phone && (
+                        <p className="text-sm text-gray-600">Phone: {order.shippingAddress.phone}</p>
+                      )}
                       <p className="text-sm text-gray-600">
                         Date: {new Date(order.createdAt).toLocaleString()}
                       </p>
                     </div>
-                    <span className={`px-3 py-1 rounded-full text-sm font-semibold ${getStatusColor(order.status)}`}>
-                      {order.status.toUpperCase()}
-                    </span>
+                    <div className="flex flex-wrap gap-2">
+                      <span className={`px-3 py-1 rounded-full text-sm font-semibold ${getStatusColor(order.status)}`}>
+                        {order.status.toUpperCase()}
+                      </span>
+                      <span className={`px-3 py-1 rounded-full text-sm font-semibold ${getPaymentStatusColor(order.paymentStatus)}`}>
+                        PAYMENT: {String(order.paymentStatus || 'pending').toUpperCase()}
+                      </span>
+                    </div>
                   </div>
 
                   {/* Order Items */}
@@ -149,8 +167,8 @@ const ManageOrders = () => {
                     <div className="space-y-2">
                       {order.items?.map((item, index) => (
                         <div key={index} className="flex justify-between text-sm">
-                          <span>{item.product?.name || 'Product'} x {item.quantity}</span>
-                          <span className="font-medium">₹{item.price * item.quantity}</span>
+                          <span>{item.name || item.product?.name || 'Product'} x {item.quantity}</span>
+                          <span className="font-medium">₹{(item.subtotal || item.price * item.quantity || 0).toLocaleString()}</span>
                         </div>
                       ))}
                     </div>
@@ -160,15 +178,28 @@ const ManageOrders = () => {
                   {order.shippingAddress && (
                     <div className="mb-4 text-sm text-gray-600">
                       <h4 className="font-semibold text-gray-900 mb-1">Shipping Address:</h4>
-                      <p>{order.shippingAddress.street}, {order.shippingAddress.city}</p>
-                      <p>{order.shippingAddress.state} - {order.shippingAddress.zipCode}</p>
+                      {order.shippingAddress.name && <p>{order.shippingAddress.name}</p>}
+                      {order.shippingAddress.street && <p>{order.shippingAddress.street}</p>}
+                      <p>
+                        {[order.shippingAddress.city, order.shippingAddress.state, order.shippingAddress.zipCode]
+                          .filter(Boolean)
+                          .join(', ')}
+                      </p>
+                      {order.shippingAddress.country && <p>{order.shippingAddress.country}</p>}
                     </div>
                   )}
 
                   {/* Total and Actions */}
                   <div className="flex justify-between items-center pt-4 border-t">
-                    <div className="text-lg font-bold text-gray-900">
-                      Total: ₹{order.totalAmount}
+                    <div>
+                      <div className="text-lg font-bold text-gray-900">
+                        Total: ₹{Number(order.totalAmount || 0).toLocaleString('en-IN', { maximumFractionDigits: 2 })}
+                      </div>
+                      {order.paidAt && (
+                        <p className="text-sm text-emerald-700 mt-1">
+                          Paid on {new Date(order.paidAt).toLocaleString()}
+                        </p>
+                      )}
                     </div>
                     <select
                       value={order.status}

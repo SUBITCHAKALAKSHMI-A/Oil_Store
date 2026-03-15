@@ -46,6 +46,17 @@ const orderSchema = new mongoose.Schema({
     enum: ['pending', 'paid', 'failed', 'refunded'],
     default: 'pending'
   },
+  paidAt: {
+    type: Date
+  },
+  paymentId: {
+    type: String,
+    trim: true
+  },
+  paymentOrderId: {
+    type: String,
+    trim: true
+  },
   shippingAddress: {
     name: String,
     phone: String,

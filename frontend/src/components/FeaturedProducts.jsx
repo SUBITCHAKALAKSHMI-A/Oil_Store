@@ -111,15 +111,15 @@ const FeaturedProducts = () => {
                   }}
                 />
                 <button 
-                  className="absolute top-3 right-3 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-white/95 shadow-md ring-1 ring-black/5 transition-all duration-300 hover:scale-105 hover:bg-white"
+                  className="absolute top-3 right-3 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-white/90 shadow-md backdrop-blur-sm transition-all duration-300 hover:scale-105"
                   onClick={(e) => handleToggleWishlist(e, product)}
                   aria-label={isInWishlist(product._id) ? 'Remove from wishlist' : 'Add to wishlist'}
                 >
                   <Heart 
-                    className={`w-5 h-5 transition-all duration-300 ${isInWishlist(product._id) ? 'text-pink-500' : 'text-slate-500'}`}
-                    fill={isInWishlist(product._id) ? "currentColor" : "none"} 
-                    stroke="currentColor" 
-                    strokeWidth={2} 
+                    className="w-7 h-7 text-white"
+                    fill="none"
+                    stroke="white"
+                    strokeWidth={2}
                   />
                 </button>
               </div>
