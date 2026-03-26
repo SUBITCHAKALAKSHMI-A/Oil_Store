@@ -10,6 +10,7 @@ import userRoutes from './routes/user.js';
 import productRoutes from './routes/product.js';
 import categoryRoutes from './routes/category.js';
 import paymentRoutes from './routes/payment.js';
+import chatRoutes from './routes/chat.js';
 
 dotenv.config();
 
@@ -38,6 +39,7 @@ app.use('/api/user', userRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/payment', paymentRoutes);
+app.use('/api/chat', chatRoutes);
 
 // Health Check
 app.get('/api/health', (req, res) => {

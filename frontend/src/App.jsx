@@ -24,6 +24,7 @@ import Settings from './pages/Settings';
 import ProductDetailPage from './pages/ProductDetailPage';
 import CheckoutPage from './pages/CheckoutPage';
 import OrderConfirmation from './pages/OrderConfirmation';
+import ChatbotWidget from './components/ChatbotWidget';
 
 function App() {
   return (
@@ -142,6 +143,7 @@ function App() {
             } 
           />
         </Routes>
+        <ChatbotWidget />
       </div>
     </Router>
       </CartProvider>

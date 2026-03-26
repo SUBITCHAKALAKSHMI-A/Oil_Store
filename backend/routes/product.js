@@ -66,32 +66,6 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Get single product
-router.get('/:id', async (req, res) => {
-  try {
-    const product = await Product.findById(req.params.id)
-      .populate('category', 'name icon description');
-
-    if (!product) {
-      return res.status(404).json({
-        success: false,
-        message: 'Product not found'
-      });
-    }
-
-    res.json({
-      success: true,
-      product
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: 'Error fetching product',
-      error: error.message
-    });
-  }
-});
-
 // Search products
 router.get('/search/query', async (req, res) => {
   try {
@@ -122,6 +96,32 @@ router.get('/search/query', async (req, res) => {
     res.status(500).json({
       success: false,
       message: 'Error searching products',
+      error: error.message
+    });
+  }
+});
+
+// Get single product
+router.get('/:id', async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id)
+      .populate('category', 'name icon description');
+
+    if (!product) {
+      return res.status(404).json({
+        success: false,
+        message: 'Product not found'
+      });
+    }
+
+    res.json({
+      success: true,
+      product
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Error fetching product',
       error: error.message
     });
   }
